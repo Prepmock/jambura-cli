@@ -1,0 +1,12 @@
+{
+    "name": "prepmock/jambura-cli",
+    "description": "simple php cli framework",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kamrul Khan",
+            "email": "kamrul@prepmock.com"
+        }
+    ],
+    "require": {}
+}
