@@ -52,5 +52,5 @@ hello world
 > php runner.php test hello
 hey
 > php runner.php test hello --im=girl
-hey beutiful
+hey beautiful
 ```
