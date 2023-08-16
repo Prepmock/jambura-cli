@@ -3,10 +3,9 @@
     "description": "simple php cli framework",
     "license": "MIT",
     "autoload": {
-        "files": [
-            "src/Cli.php",
-            "src/Command.php"
-        ]
+        "psr-4": {
+            "Jambura\\": "src/"
+        }
     },
     "authors": [
         {
