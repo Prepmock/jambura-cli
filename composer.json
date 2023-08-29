@@ -2,6 +2,11 @@
     "name": "prepmock/jambura-cli",
     "description": "simple php cli framework",
     "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Jambura\\": "src/"
+        }
+    },
     "authors": [
         {
             "name": "Kamrul Khan",
