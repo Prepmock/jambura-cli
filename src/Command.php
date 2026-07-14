@@ -17,6 +17,14 @@ abstract class Command
     private $options;
 
     /**
+     * Optional handler that receives every log entry, alongside the
+     * built-in colored screen output.
+     *
+     * @var LogHandlerInterface|null
+     */
+    private $logHandler;
+
+    /**
      * Numeric severity, lowest to highest, for each supported log level.
      *
      * @var array<string, int>
@@ -78,6 +86,20 @@ abstract class Command
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * Register a handler to receive log entries emitted via
+     * debug()/info()/warning()/error().
+     *
+     * @param LogHandlerInterface|null $logHandler
+     *
+     * @return static Returns $this for method chaining.
+     */
+    public function setLogHandler(?LogHandlerInterface $logHandler)
+    {
+        $this->logHandler = $logHandler;
         return $this;
     }
 
@@ -146,7 +168,8 @@ abstract class Command
     }
 
     /**
-     * Print a log line if its level meets the configured --log-level threshold.
+     * Print a log line if its level meets the configured --log-level threshold,
+     * and forward it to the registered log handler, if any.
      *
      * @param string $level   One of the keys in LOG_LEVELS ('debug', 'info', 'warning', 'error').
      * @param string $message Message to print.
@@ -159,13 +182,18 @@ abstract class Command
             return;
         }
 
-        $line = sprintf('[%s] %s: %s', date('H:i:s'), strtoupper($level), $message);
+        $time = date('H:i:s');
+        $line = sprintf('[%s] %s: %s', $time, strtoupper($level), $message);
 
         if ($this->colorsSupported()) {
             $line = self::LOG_COLORS[$level].$line.self::COLOR_RESET;
         }
 
         echo $line."\n";
+
+        if ($this->logHandler !== null) {
+            $this->logHandler->handle($level, $message, $time);
+        }
     }
 
     /**

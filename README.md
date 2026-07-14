@@ -77,3 +77,24 @@ By default all levels are shown. Restrict what's printed at runtime with `--log-
 ```
 
 Levels, from least to most severe: `debug`, `info`, `warning`, `error`. Only messages at or above the chosen level are printed.
+
+### Custom log handler
+
+To forward log entries somewhere else (a file, a remote service, etc.) in addition to the screen, implement `\Jambura\LogHandlerInterface` and register it on the runner with `setLogHandler()`:
+
+```php
+class FileLogHandler implements \Jambura\LogHandlerInterface
+{
+    public function handle(string $level, string $message, string $time): void
+    {
+        file_put_contents('cli.log', "[$time] ".strtoupper($level).": $message\n", FILE_APPEND);
+    }
+}
+
+\Jambura\Cli::init()
+    ->setCommandsPath('path/to/my/commands/direcoty')
+    ->setLogHandler(new FileLogHandler())
+    ->run();
+```
+
+`setLogHandler()` is optional and only accepts objects implementing `LogHandlerInterface`; every entry that passes the `--log-level` threshold is passed to it alongside the built-in screen output.

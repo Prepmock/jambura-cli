@@ -6,6 +6,7 @@ class Cli {
     
     private $argv;
     private $commandsPath;
+    private $logHandler;
 
     private function __construct()
     {
@@ -27,6 +28,20 @@ class Cli {
         return $this;
     }
 
+    /**
+     * Register a handler to receive every log entry emitted by commands,
+     * in addition to the built-in colored screen output.
+     *
+     * @param LogHandlerInterface $logHandler
+     *
+     * @return static
+     */
+    public function setLogHandler(LogHandlerInterface $logHandler)
+    {
+        $this->logHandler = $logHandler;
+        return $this;
+    }
+
     public function run()
     {
         $index = 2;
@@ -45,6 +60,7 @@ class Cli {
 
         $command = new $commandName();
         $command
+            ->setLogHandler($this->logHandler)
             ->loadParams(array_slice($this->argv, $index))
             ->$handler();
 
