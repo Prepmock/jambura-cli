@@ -31,8 +31,13 @@ class Cli {
     {
         $index = 2;
         $commandName = $this->argv[1];
-        $handler = isset($this->argv[2]) ? 'handle_'.$this->argv[2] : 'handle_default';
-        if ($handler != 'handle_default') {
+        $action = $this->argv[2] ?? null;
+        if ($action !== null && strncmp($action, '-', 1) === 0) {
+            $action = null;
+        }
+
+        $handler = $action !== null ? 'handle_'.$action : 'handle_default';
+        if ($action !== null) {
           $index++;
         }
 

@@ -54,3 +54,26 @@ hey
 > php runner.php test hello --im=girl
 hey beautiful
 ```
+
+## Logging
+
+Every command has `debug()`, `info()`, `warning()` and `error()` available, printing a colored, timestamped line to the screen (colors are skipped automatically when output isn't a terminal, e.g. when piped to a file):
+
+```php
+public function handle_default()
+{
+    $this->debug('starting up');
+    $this->info('hello world');
+    $this->warning('something to watch');
+    $this->error('something went wrong');
+}
+```
+
+By default all levels are shown. Restrict what's printed at runtime with `--log-level=`:
+
+```
+> php runner.php test --log-level=error
+[10:32:01] ERROR: something went wrong
+```
+
+Levels, from least to most severe: `debug`, `info`, `warning`, `error`. Only messages at or above the chosen level are printed.

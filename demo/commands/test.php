@@ -4,7 +4,10 @@ class test extends \Jambura\Command
 {
     public function handle_default()
     {
-        echo "hello world\n";
+        $this->debug('starting up');
+        $this->info('hello world');
+        $this->warning('something to watch');
+        $this->error('something went wrong');
     }
 
     public function handle_hello()
